@@ -1,16 +1,43 @@
-function searchProfile() {
-    const profileName = document.getElementById("profileName").value;
-    const profileDetails = document.getElementById("profileDetails");
+let inp=document.querySelector("input")
+let box=document.querySelector(".error-box")
+   
+      
   
-    fetch(`https://api.github.com/users/${profileName}`)
-      .then(response => response.json())
-      .then(data => {
-        const profileImage = `<img src="${data?.avatar_url}" alt="${profileName}'s GitHub profile image">`;
-        const profileFollowers = `<p>Followers: <strong>${data?.followers}</strong></p>`;
-        const profileSubscriptions = `<p>Subscriptions: <strong>${data?.subscriptions_count}</strong></p>`;
-        profileDetails.innerHTML = profileImage + profileFollowers + profileSubscriptions;
-      })
-      .catch(error => {
-        profileDetails.innerHTML = `<p>Error: ${error.message}</p>`;
-      });
-  }
+
+
+
+
+
+const getUserData = async () => {
+    let url = await `https://api.github.com/search/users?q=${inp.value}`
+    
+        await fetch(url)
+        .then(res => res.json())
+        .then((data) => {
+            fetch(`https://api.github.com/users/${inp.value}/followers?per_page=100&page=1`)
+            .then((res) => res.json())
+            .then((follow) => {
+                let item = data?.items[0]
+                let box = document.querySelector(".error-box")
+                box.innerHTML = `
+                <div class="flex">
+                <img src="${item?.avatar_url}" alt="" class="user-img">
+                <div class="right">
+                    <h3>${item?.login}</h3>
+                    <ul class="list">
+                        <li>
+                            <span>${follow.length +"  "}</span>
+                            Followers
+                        </li>
+                       
+                    </ul>
+                </div>
+            </div>
+                              `
+            })
+        })
+
+
+}
+
+inp.addEventListener("keyup",getUserData)
