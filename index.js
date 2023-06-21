@@ -26,7 +26,7 @@ const getUserData = async () => {
                     <h3>${item?.login}</h3>
                     <ul class="list">
                         <li>
-                            <span>${follow.length +"  "}</span>
+                            <span>${follow.length}</span>
                             Followers
                         </li>
                        
